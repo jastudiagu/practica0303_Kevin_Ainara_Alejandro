@@ -54,3 +54,11 @@ while jugando:
     pygame.time.Clock().tick(60)
 
 pygame.quit()
+
+
+#prueba
+#prueba
+#prueba
+#prueba
+#prueba
+
