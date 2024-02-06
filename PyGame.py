@@ -1,4 +1,5 @@
 import pygame
+from random import randint ##
 
 # Inicialización de Pygame
 pygame.init()
@@ -16,6 +17,8 @@ ballrect = ball.get_rect()
 # Inicializo los valores con los que se van a mover la pelota
 speed = [-6,6]
 
+speed = [randint(3,6),randint(3,6)] ## En cada ejecución la pelota tiene una velocidad distinta
+
 # Pongo la pelota en el origen de coordenadas
 ballrect.move_ip(0,0)
 
@@ -30,6 +33,7 @@ brickrect = brick.get_rect()
 # Pongo el bate en la parte inferior de la pantalla
 baterect.move_ip(546,824)                                #MODIFICAR PARA CENTRAR 546
 
+fuente = pygame.font.Font(None, 36) ##
 
 # Bucle principal del juego
 jugando = True
@@ -68,10 +72,17 @@ while jugando:
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():
         baterect = baterect.move(-6,0)
 
-        
+    if ballrect.bottom > ventana.get_height():       ##AL TOCAR LA PARTE INFERIOR SE CIERRA EL JUEGO 
+        texto = fuente.render("Game Over", True, (125,125,125))
+        texto_rect = texto.get_rect()
+        texto_x = ventana.get_width() / 2 - texto_rect.width / 2
+        texto_y = ventana.get_height() / 2 - texto_rect.height / 2
+        ventana.blit(texto, [texto_x, texto_y])
+    else:
+        ventana.fill((252, 243, 207))
+        ventana.blit(ball, ballrect)
+        ventana.blit(bate, baterect)  ##
 
-    ##if ballrect.bottom > ventana.get_height():       #AL TOCAR LA PARTE INFERIOR SE CIERRA EL JUEGO
-    ##    pygame.quit()
 
 
     # Se pinta la ventana con un color
