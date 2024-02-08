@@ -15,9 +15,11 @@ ball = pygame.image.load("pelota.png")
 ballrect = ball.get_rect()
 
 # Inicializo los valores con los que se van a mover la pelota
-speed = [-6,6]
 
-speed = [randint(3,6),randint(3,6)] ## En cada ejecución la pelota tiene una velocidad distinta
+speed_x = randint(3,6)
+speed_y = randint(3,6)
+
+speed = [speed_x,speed_y] ## En cada ejecución la pelota tiene una velocidad distinta
 
 # Pongo la pelota en el origen de coordenadas
 ballrect.move_ip(0,0)
@@ -33,27 +35,38 @@ brickrect = brick.get_rect()
 # Pongo el bate en la parte inferior de la pantalla
 baterect.move_ip(546,824)                                #MODIFICAR PARA CENTRAR 546
 
-fuente = pygame.font.Font(None, 36) ##
+#Ejercicio 2: Aceleración de la pelota cada cierto golpes con la barra
+#Creamos un contador de colisiones entre la pelota y la barra
+cont_golpes = 0
+
+fuente = pygame.font.Font(None, 80) 
 
 # Bucle principal del juego
 jugando = True
 while jugando:
-    #Comprobamos los eventos
-    #Comprobamos si se ha pulsado el botón de cierre de la ventana
+    
+    # Comprobamos los eventos
+
+    # Comprobamos si se ha pulsado el botón de cierre de la ventana
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             jugando = False
 
-     # Compruebo si se ha pulsado alguna tecla
+    # Compruebo si se ha pulsado alguna tecla
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         baterect = baterect.move(-6,0)
     if keys[pygame.K_RIGHT]:
         baterect = baterect.move(6,0)
 
-     # Compruebo si hay colisión
+    # Compruebo si hay colisión
     if baterect.colliderect(ballrect):
         speed[1] = -speed[1]
+        cont_golpes += 1
+
+    # Al llegar el contador a 5 golpes y al tocar el borde la velocidad de la pelota se suma 2
+    if cont_golpes == 5 and ballrect.top < 0:
+        speed = [speed_x +2 ,speed_y +2 ]
 
     # Muevo la pelota
     ballrect = ballrect.move(speed)
@@ -65,15 +78,17 @@ while jugando:
     if ballrect.top < 0 or ballrect.bottom > ventana.get_height():
         speed[1] = -speed[1]
 
-    #Cuando el bate pegue en la parte izquierda de la ventana, contrarrestamos la velocidad del bate.
+    # Cuando el bate pegue en la parte izquierda de la ventana, contrarrestamos la velocidad del bate.
     if keys[pygame.K_LEFT] and baterect.left < 0:
         baterect = baterect.move(6,0)
-    #Cuando el bate pegue en la parte derecha de la ventana, contrarrestamos la velocidad del bate.
+    # Cuando el bate pegue en la parte derecha de la ventana, contrarrestamos la velocidad del bate.
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():
         baterect = baterect.move(-6,0)
 
-    if ballrect.bottom > ventana.get_height():       ##AL TOCAR LA PARTE INFERIOR SE CIERRA EL JUEGO 
-        texto = fuente.render("Game Over", True, (125,125,125))
+
+
+    if ballrect.bottom > ventana.get_height():
+        texto = fuente.render("Game Over", True, (255,0,0))
         texto_rect = texto.get_rect()
         texto_x = ventana.get_width() / 2 - texto_rect.width / 2
         texto_y = ventana.get_height() / 2 - texto_rect.height / 2
@@ -81,7 +96,8 @@ while jugando:
     else:
         ventana.fill((252, 243, 207))
         ventana.blit(ball, ballrect)
-        ventana.blit(bate, baterect)  ##
+        ventana.blit(bate, baterect)
+
 
 
 
