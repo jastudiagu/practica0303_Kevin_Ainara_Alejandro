@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 from random import randint ##
 
 # Inicialización de Pygame
@@ -19,7 +19,7 @@ ballrect = ball.get_rect()
 speed_x = randint(3,6)
 speed_y = randint(3,6)
 
-speed = [speed_x,speed_y] ## En cada ejecución la pelota tiene una velocidad distinta
+speed = [speed_x,speed_y] # En cada ejecución la pelota tiene una velocidad distinta
 
 # Pongo la pelota en el origen de coordenadas
 ballrect.move_ip(0,0)
@@ -28,9 +28,21 @@ ballrect.move_ip(0,0)
 bate = pygame.image.load("bate.png")
 baterect = bate.get_rect()
 
-#Crea el objeto ladrillo y obtengo su rectangulo
+# Crea el objeto ladrillo y obtengo su rectangulo
 brick = pygame.image.load("ladrillo.png")
 brickrect = brick.get_rect()
+
+# Definimos la clase ladrillo.
+class Ladrillo(Sprite):
+    def __init__(self, x, y, puntos):       # Contructor de la clase ladrillo.
+        super() .__init__()                 # Herencia de otra clase.
+
+# Inicialización de otros objetos MIRAR ESTO
+        self.image = pg.image.load()
+        os.path.join("resources", "images", "ladrillo.png")
+        self.rect = self.image.get_rect (x = x, y = y)
+        self.puntos = puntos
+
 
 # Pongo el bate en la parte inferior de la pantalla
 baterect.move_ip(546,824)                                #MODIFICAR PARA CENTRAR 546
@@ -98,6 +110,16 @@ while jugando:
         ventana.blit(ball, ballrect)
         ventana.blit(bate, baterect)
 
+    # Compruebo si la pelota toca la parte inferior y si es asi, game over en la pantalla.
+    if ballrect.bottom > ventana.get_height():
+        texto_rect = texto.get_rect()
+        texto_x = ventana.get_width() / 2 - texto_rect.width / 2
+        texto_y = ventana.get_height() / 2 - texto_rect.height / 2
+        texto = fuente.render("Game Over", True, (255, 0, 0))
+        ventana.blit(texto, [texto_x, texto_y])
+        pygame.display.flip()
+        pygame.time.delay(2000)  # Espera 2 segundos antes de salir
+        jugando = False #Esto hace que el juego se cierre asi no vuelve a iniciar
 
 
 
