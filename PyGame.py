@@ -37,7 +37,7 @@ class Ladrillo(Sprite):
     def __init__(self, x, y, puntos):       # Contructor de la clase ladrillo.
         super() .__init__()                 # Herencia de otra clase.
 
-# Inicialización de otros objetos MIRAR ESTO
+# Inicialización de otros objetos MIRAR ESTO!!!!!
         self.image = pg.image.load()
         os.path.join("resources", "images", "ladrillo.png")
         self.rect = self.image.get_rect (x = x, y = y)
