@@ -1,4 +1,5 @@
 import pygame, os
+from pygame import gfxdraw
 from random import randint ##
 
 # Inicialización de Pygame
@@ -32,17 +33,26 @@ baterect = bate.get_rect()
 brick = pygame.image.load("ladrillo.png")
 brickrect = brick.get_rect()
 
+
+GREEN = (0,255,0)
+"""LADRILLO"""
 # Definimos la clase ladrillo.
-class Ladrillo(Sprite):
-    def __init__(self, x, y, puntos):       # Contructor de la clase ladrillo.
-        super() .__init__()                 # Herencia de otra clase.
+class Ladrillo(pygame.sprite.Sprite):
+    def __init__(self, x, y):       # Contructor de la clase ladrillo.
+        self.x = x
+        self.y = y
+        
+    def update(self):
+        pygame.draw.rect(ventana, GREEN, (self.x, self.y, 60,20))
+        self.rect = pygame.Rect(self.x, self.y, 60,20)
+#         super() .__init__(self)                 # Herencia de otra clase.
 
-# Inicialización de otros objetos MIRAR ESTO!!!!!
-        self.image = pg.image.load()
-        os.path.join("resources", "images", "ladrillo.png")
-        self.rect = self.image.get_rect (x = x, y = y)
-        self.puntos = puntos
-
+# # Inicialización de otros objetos MIRAR ESTO!!!!!
+#         self.image = pygame.image.load("ladrillo.png")
+#         #os.path.join("resources", "images", "ladrillo.png")
+#         self.rect = self.image.get_rect(x = x, y = y)
+#         self.puntos = puntos(x = 560, y = 860)
+"""..."""
 
 # Pongo el bate en la parte inferior de la pantalla
 baterect.move_ip(546,824)                                #MODIFICAR PARA CENTRAR 546
@@ -97,31 +107,18 @@ while jugando:
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():
         baterect = baterect.move(-6,0)
 
-
-
-    if ballrect.bottom > ventana.get_height():
-        texto = fuente.render("Game Over", True, (255,0,0))
-        texto_rect = texto.get_rect()
-        texto_x = ventana.get_width() / 2 - texto_rect.width / 2
-        texto_y = ventana.get_height() / 2 - texto_rect.height / 2
-        ventana.blit(texto, [texto_x, texto_y])
-    else:
-        ventana.fill((252, 243, 207))
-        ventana.blit(ball, ballrect)
-        ventana.blit(bate, baterect)
-
+    """GAME OVER Y CERRAR JUEGO"""
     # Compruebo si la pelota toca la parte inferior y si es asi, game over en la pantalla.
     if ballrect.bottom > ventana.get_height():
+        texto = fuente.render("Game Over", True, (255, 0, 0))
         texto_rect = texto.get_rect()
         texto_x = ventana.get_width() / 2 - texto_rect.width / 2
         texto_y = ventana.get_height() / 2 - texto_rect.height / 2
-        texto = fuente.render("Game Over", True, (255, 0, 0))
         ventana.blit(texto, [texto_x, texto_y])
         pygame.display.flip()
-        pygame.time.delay(2000)  # Espera 2 segundos antes de salir
+        pygame.time.delay(10000)  # Espera 10 segundos antes de salir
         jugando = False #Esto hace que el juego se cierre asi no vuelve a iniciar
-
-
+    """..."""
 
     # Se pinta la ventana con un color
     # Esto borra los posibles elementos que teníamos anteriormente
