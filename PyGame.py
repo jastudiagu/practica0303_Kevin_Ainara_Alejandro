@@ -104,9 +104,9 @@ ladrilloI = pygame.image.load("ladrilloduro.com.png")              # Crea el obj
 
 def generar_ladrillosI():                                   
     lista_ladrillosI = []                                       # Lista vacía que almacenará los ladrillos reforzados
-    for i in range(1):                                       # Bucle for para iterar sobre cada fila de ladrillos
-        for j in range(2):                                # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
-            x = j * 1200 + 13                                  # 240 es el espacio entre los ladrillos y 13 el margen izq.
+    for i in range(1):                                          # Bucle for para iterar sobre cada fila de ladrillos
+        for j in range(2):                                      # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
+            x = j * 1200 + 13                                   # 240 es el espacio entre los ladrillos y 13 el margen izq.
             y = i * 51 + 412                                      # 51 es el espacio entre los ladrillos en columna y 312 el margen con la parte superior
             lista_ladrillosI.append(LadrilloIndestructible(x, y))    # Crea objeto con coordenadas x e y , y las agrega a la lista
     return lista_ladrillosI                                    # Devuelve los ladrillos generados
