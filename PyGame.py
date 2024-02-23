@@ -1,7 +1,48 @@
-import pygame, os
-import sys
-from pygame import gfxdraw
-from random import randint ##
+import pygame               # Importamos la librería pygame
+from random import randint  # Importamos la función randint
+
+"""CLASE LADRILLO"""
+
+class Brick:                                  # Definimos la clase para los ladrillos
+    def __init__(self, x, y):                 # Inicializamos los atributos del objeto
+        self.rect = pygame.Rect(x, y, 50, 50) # Genera el rectángulo del ladrillo en el juego
+        self.image = brick                    # Se asigna la imagen del ladrillo 
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
+
+
+"""CLASE LADRILLO REFORZADO"""
+
+class LadrilloReforzado:                        # Definimos la clase ladrillo reforzado
+    def __init__(self, x, y):                   # El método __init__ se utiliza para inicializar los atributos de un objeto
+        self.rect = pygame.Rect(x, y, 55, 55)   # Se crea un rectángulo para representar el ladrillo en el juego, se especifican coordenadas(x,y), y el ancho y altura del rectángulo(50, 50)
+        self.image = ladrilloR                     # Se asigna la imagen del ladrillo 
+        self.golpes = 2
+
+    def golpear(self):
+        self.golpes -= 1
+        if self.golpes <= 0:
+            self.eliminar()
+        else:
+            # Cambiar de color u otras acciones si es necesario
+            pass
+
+    def eliminar(self):
+        # Eliminar el ladrillo de la lista o el grupo
+        bloquesR.remove(self)
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
+
+
+
+
+"""
+INICIALZACIÓN DEL JUEGO
+
+"""
+
 
 # Inicialización de Pygame
 pygame.init()
@@ -12,7 +53,7 @@ pygame.display.set_caption("Juego")
 fondo = pygame.image.load("fondojuego.png")   #Crea el objeto fondo
 
 """MUSICA DE FONDO"""
-pygame.mixer.music.load('MUSICAMARIO.mp3')      #Cargamos el archivo de sonido.
+pygame.mixer.music.load('MUSICAMARIO.mp3')      #Cargamos el archivo de sonido
 pygame.mixer.music.play(-1)                     #Reproducimos de forma infinita la musica.
 
 
@@ -35,16 +76,6 @@ ballrect.move_ip(400,524) # Pongo la pelota en la posición de inicio preestable
 """LADRILLOS"""
 brick = pygame.image.load("ladrillo.png") # Crea el objeto ladrillo
 
-#Definimos la clase para los ladrillos
-class Brick:
-    def __init__(self, x, y):                   # El método __init__ se utiliza para inicializar los atributos de un objeto
-        self.rect = pygame.Rect(x, y, 50, 50)   # Se crea un rectángulo para representar el ladrillo en el juego, se especifican coordenadas(x,y), y el ancho y altura del rectángulo(50, 50)
-        self.image = brick                      # Se asigna la imagen del ladrillo 
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
-
-# Función para generar ladrillos
 def generate_bricks():
     bricks = []                         # Lista vacía que almacenará los ladrillos generados
     for row in range(5):                # Bucle for para iterar sobre cada fila de ladrillos
@@ -53,37 +84,14 @@ def generate_bricks():
             y = row * 51 + 60           # Esto calcula la coordenada y de cada ladrillo en función de la fila en la que se encuentre (El 51 para el espacio vertical entre los ladrillos y el 60 es para dejar margen en la parte superior)
             bricks.append(Brick(x, y))  # Se crea el objeto Brick usando las coordenadas (x, y) calculadas y lo agrega a la lista bricks
     return bricks                       # Devuelve los ladrillos generados
- 
 
 bricks = generate_bricks()
 bloques = pygame.sprite.Group()  
 
 
+
 """LADRILLO REFORZADO"""
-
 ladrilloR = pygame.image.load("ladrillomario.png") # Crea el objeto ladrillo
-
-# Definimos la clase ladrillo reforzado
-class LadrilloReforzado:
-    def __init__(self, x, y):                   # El método __init__ se utiliza para inicializar los atributos de un objeto
-        self.rect = pygame.Rect(x, y, 55, 55)   # Se crea un rectángulo para representar el ladrillo en el juego, se especifican coordenadas(x,y), y el ancho y altura del rectángulo(50, 50)
-        self.image = ladrilloR                     # Se asigna la imagen del ladrillo 
-        self.golpes = 2
-
-    def golpear(self):
-        self.golpes -= 1
-        if self.golpes <= 0:
-            self.eliminar()
-        else:
-            # Cambiar de color u otras acciones si es necesario
-            pass
-
-    def eliminar(self):
-        # Eliminar el ladrillo de la lista o el grupo
-        bloquesR.remove(self)
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
 
 # Función para generar ladrillos
 def generar_ladrillosR():
@@ -95,12 +103,15 @@ def generar_ladrillosR():
             lista_ladrillosR.append(LadrilloReforzado(x, y))  # Se crea el objeto Brick usando las coordenadas (x, y) calculadas y lo agrega a la lista bricks
     return lista_ladrillosR                       # Devuelve los ladrillos generados
  
-
 ladrillo_reforzado = generar_ladrillosR()
 bloquesR = pygame.sprite.Group()
 
 
-"""BUCLE DEL JUEGO"""
+
+"""
+BUCLE DEL JUEGO
+"""
+
 # Bucle principal del juego
 jugando = True
 while jugando:
