@@ -114,17 +114,17 @@ while jugando:                              # Iniciamos bucle principal del jueg
 
     keys = pygame.key.get_pressed()                                     # Compruebo si se ha pulsado alguna tecla
     if keys[pygame.K_LEFT]:                                             
-        baterect = baterect.move(-7,0)                                  # Si se pulsa tecla izq., el bate se mueve en el eje x hacía la izquierda.
+        baterect = baterect.move(-12,0)                                  # Si se pulsa tecla izq., el bate se mueve en el eje x hacía la izquierda.
 
     if keys[pygame.K_RIGHT]:                                            # Si se pulsa dcha., el bate se mueve en el eje x hacía la derecha.
-        baterect = baterect.move(7,0) 
+        baterect = baterect.move(12,0) 
 
     
     if keys[pygame.K_LEFT] and baterect.left < 0:                       # Bate pega parte izq. de pantalla, cancelamos con velocidad inversa
-        baterect = baterect.move(7,0)
+        baterect = baterect.move(12,0)
     
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():   # Bate pega parte dcha. de pantalla, cancelamos con velocidad inversa
-        baterect = baterect.move(-7,0)
+        baterect = baterect.move(-12,0)
 
    
     """PELOTA"""
