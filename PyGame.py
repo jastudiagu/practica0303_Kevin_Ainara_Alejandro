@@ -6,12 +6,10 @@ from random import randint ##
 # Inicialización de Pygame
 pygame.init()
 
-
 """MARCO Y FONDO"""
 ventana = pygame.display.set_mode((1280,900)) # Inicialización de la superficie de dibujo
 pygame.display.set_caption("Juego")
 fondo = pygame.image.load("fondojuego.png")   #Crea el objeto fondo
-
 
 """BATE"""
 bate = pygame.image.load("barraladrillo.png") # Crea el objeto bate
@@ -49,16 +47,46 @@ def generate_bricks():
             x = column * 60 + 15        # Esto calcula la coordenada x de cada ladrillo en función de la columna en la que se encuentre (El 60 es para el espacio horizontal entre los ladrillos y el 15 es para dejar margen en el lado izquierdo)
             y = row * 51 + 60           # Esto calcula la coordenada y de cada ladrillo en función de la fila en la que se encuentre (El 51 para el espacio vertical entre los ladrillos y el 60 es para dejar margen en la parte superior)
             bricks.append(Brick(x, y))  # Se crea el objeto Brick usando las coordenadas (x, y) calculadas y lo agrega a la lista bricks
-    return bricks                       # Devuelve los ladrillos generados 
+    return bricks                       # Devuelve los ladrillos generados
+ 
 
 bricks = generate_bricks()
 bloques = pygame.sprite.Group()  
 
+""""""
+"""LADRILLO REFORZADO"""
 
-"""OTRAS PARTES DEL CODIGO"""
-fuente = pygame.font.Font(None, 80) 
+ladrilloR = pygame.image.load("ladrillomario.png") # Crea el objeto ladrillo
 
+# Definimos la clase ladrillo reforzado
+class LadrilloReforzado:
+    def __init__(self, x, y):                   # El método __init__ se utiliza para inicializar los atributos de un objeto
+        self.rect = pygame.Rect(x, y, 50, 50)   # Se crea un rectángulo para representar el ladrillo en el juego, se especifican coordenadas(x,y), y el ancho y altura del rectángulo(50, 50)
+        self.image = ladrilloR                     # Se asigna la imagen del ladrillo 
 
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
+
+# Función para generar ladrillos
+def generar_ladrillosR():
+    lista_ladrillosR = []                         # Lista vacía que almacenará los ladrillos generados
+    for fila in range(1):                # Bucle for para iterar sobre cada fila de ladrillos
+        for columna in range(21):        # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
+            x = columna * 60 + 15        # Esto calcula la coordenada x de cada ladrillo en función de la columna en la que se encuentre (El 60 es para el espacio horizontal entre los ladrillos y el 15 es para dejar margen en el lado izquierdo)
+            y = fila * 51 + 350          # Esto calcula la coordenada y de cada ladrillo en función de la fila en la que se encuentre (El 51 para el espacio vertical entre los ladrillos y el 60 es para dejar margen en la parte superior)
+            lista_ladrillosR.append(Brick(x, y))  # Se crea el objeto Brick usando las coordenadas (x, y) calculadas y lo agrega a la lista bricks
+            if fila == 2 and columna % 5 == 0:  # Ejemplo: Ladrillos especiales en la tercera fila, cada 5 columnas
+                bricks.append(LadrilloReforzado(x, y))
+            else:
+                bricks.append(Brick(x, y))
+    return lista_ladrillosR                       # Devuelve los ladrillos generados
+ 
+
+ladrillo_reforzado = generar_ladrillosR()
+bloquesR = pygame.sprite.Group()
+""""""
+
+"""BUCLE DEL JUEGO"""
 # Bucle principal del juego
 jugando = True
 while jugando:
@@ -104,7 +132,7 @@ while jugando:
         speed[1] = -speed[1]
 
    
-    """LADRILLOS"""
+    """LADRILLOS COLISIÓN"""
     # Comprobación de colisión de la pelota con los ladrillos
     for brick in bricks:
         if ballrect.colliderect(brick.rect):    # Si la pelota colisiona con un ladrillo
@@ -114,9 +142,22 @@ while jugando:
     
     for brick in bricks:                        # Dibujo de los ladrillos
         brick.draw(ventana)
-    
+
+    """"""
+    """LADRILLOS REFORZADOS COLISIÓN"""
+    # Comprobación de colisión de la pelota con los ladrillos
+    """for brick in bricks:
+        if ballrect.colliderect(brick.rect):    # Si la pelota colisiona con un ladrillo
+            speed[1] = -speed[1]                # Cambiar dirección vertical de la pelota
+            bricks.remove(brick)                # Eliminar el ladrillo de la lista
+            break
+    """
+    for ladrilloR in ladrillo_reforzado:                        # Dibujo de los ladrillos
+        ladrilloR.draw(ventana)
+    """"""
 
     """GAME OVER Y CERRAR JUEGO"""
+    fuente = pygame.font.Font(None, 80) 
     if ballrect.bottom > ventana.get_height():                      # Compruebo si la pelota toca la parte inferior y si es asi, game over en la pantalla.
         texto = fuente.render("Game Over", True, (255, 0, 0))
         texto_rect = texto.get_rect()
@@ -130,6 +171,6 @@ while jugando:
     
     """OTRAS PARTES DEL CODIGO"""
     pygame.display.flip()           # Todos los elementos del juego se vuelven a dibujar
-    pygame.time.Clock().tick(60)    # Controlamos la frecuencia de refresco (FPS)
+    pygame.time.Clock().tick(60)    # Controlamos la tasa de refresco (FPS)
 
 pygame.quit()
