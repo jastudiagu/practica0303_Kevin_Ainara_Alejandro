@@ -17,6 +17,7 @@ class LadrilloReforzado:                      # Definimos la clase para los ladr
     def __init__(self, x, y):                 # Inicializamos los atributos del objeto
         self.rect = pygame.Rect(x, y, 55, 55) # Genera el rectángulo del ladrillo en el juego
         self.image = ladrilloR                # Se asigna la imagen del ladrillo reforzado
+<<<<<<< HEAD
         self.golpes = 0
 
 
@@ -31,6 +32,8 @@ class LadrilloReforzado:                      # Definimos la clase para los ladr
     # def eliminar(self):
     #     # Eliminar el ladrillo de la lista o el grupo
     #     bloquesR.remove(self)
+=======
+>>>>>>> 0926856cc52cfd8b860f150d0f9498e665ef431e
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)   # Dibuja el ladrillo en la superficie de destino 
@@ -97,7 +100,11 @@ def generar_ladrillosR():
     lista_ladrillosR = []                                       # Lista vacía que almacenará los ladrillos reforzados
     for fila in range(1):                                       # Bucle for para iterar sobre cada fila de ladrillos
         for columna in range(11):                               # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
+<<<<<<< HEAD
             x = columna * 240 + 13                              # 120 es el espacio entre los ladrillosy 13 el margen izq.
+=======
+            x = columna * 240 + 13                              # 240 es el espacio entre los ladrillosy 13 el margen izq.
+>>>>>>> 0926856cc52cfd8b860f150d0f9498e665ef431e
             y = fila * 51 + 312                                 # 51 es el espacio entre los ladrillos en columna y 312 el margen con la parte superior
             lista_ladrillosR.append(LadrilloReforzado(x, y))    # Crea objeto con coordenadas x e y , y las agrega a la lista
     return lista_ladrillosR                                     # Devuelve los ladrillos generados
@@ -128,17 +135,17 @@ while jugando:                              # Iniciamos bucle principal del jueg
 
     keys = pygame.key.get_pressed()                                     # Compruebo si se ha pulsado alguna tecla
     if keys[pygame.K_LEFT]:                                             
-        baterect = baterect.move(-7,0)                                  # Si se pulsa tecla izq., el bate se mueve en el eje x hacía la izquierda.
+        baterect = baterect.move(-12,0)                                  # Si se pulsa tecla izq., el bate se mueve en el eje x hacía la izquierda.
 
     if keys[pygame.K_RIGHT]:                                            # Si se pulsa dcha., el bate se mueve en el eje x hacía la derecha.
-        baterect = baterect.move(7,0) 
+        baterect = baterect.move(12,0) 
 
     
     if keys[pygame.K_LEFT] and baterect.left < 0:                       # Bate pega parte izq. de pantalla, cancelamos con velocidad inversa
-        baterect = baterect.move(7,0)
+        baterect = baterect.move(12,0)
     
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():   # Bate pega parte dcha. de pantalla, cancelamos con velocidad inversa
-        baterect = baterect.move(-7,0)
+        baterect = baterect.move(-12,0)
 
    
     """PELOTA"""
