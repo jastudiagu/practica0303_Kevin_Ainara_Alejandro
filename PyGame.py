@@ -24,42 +24,36 @@ speed_y = randint(3,6)
 speed = [speed_x,speed_y] # En cada ejecución la pelota tiene una velocidad distinta
 
 # Pongo la pelota en el origen de coordenadas
-ballrect.move_ip(0,0)
+ballrect.move_ip(400,524)
 
 # Crea el objeto bate, y obtengo su rectángulo
 bate = pygame.image.load("barraladrillo.png")
 baterect = bate.get_rect()
 
-# Crea el objeto ladrillo y obtengo su rectangulo
-brick = pygame.image.load("ladrillomario.png")
-brickrect = brick.get_rect()
+# Crea el objeto ladrillo 
+brick = pygame.image.load("ladrillo.png")
 
+"""LADRILLOS"""
+# Definimos la clase para los ladrillos
+class Brick:
+    def __init__(self, x, y):                   # El método __init__ se utiliza para inicializar los atributos de un objeto
+        self.rect = pygame.Rect(x, y, 50, 50)   # Se crea un rectángulo para representar el ladrillo en el juego, se especifican coordenadas(x,y), y el ancho y altura del rectángulo(50, 50)
+        self.image = brick                      # Se asigna la imagen del ladrillo 
 
-GREEN = (0,255,0)
-"""LADRILLO"""
-# Definimos la clase ladrillo.
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)     # Para dibujar la imagen del ladrillo(self.image), en la superficie de destino(surface) en la posición especificada por el rectángulo del ladrillo(self.rect)
 
-"""class Bloque(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.image.load("ladrillomario.png")
-        self.rect = self.image.get_rect(topleft=(x, y))"""
+# Función para generar ladrillos
+def generate_bricks():
+    bricks = []                   # Lista vacía que almacenará los ladrillos generados
+    for row in range(5):          # Bucle for para iterar sobre cada fila de ladrillos
+        for column in range(21):  # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
+            x = column * 60 + 15  # Esto calcula la coordenada x de cada ladrillo en función de la columna en la que se encuentre (El 60 es para el espacio horizontal entre los ladrillos y el 15 es para dejar margen en el lado izquierdo)
+            y = row * 51 + 60     # Esto calcula la coordenada y de cada ladrillo en función de la fila en la que se encuentre (El 51 para el espacio vertical entre los ladrillos y el 60 es para dejar margen en la parte superior)
+            bricks.append(Brick(x, y)) # Se crea el objeto Brick usando las coordenadas (x, y) calculadas y lo agrega a la lista bricks
+    return bricks                 # Devuelve los ladrillos generados 
 
-"""class Ladrillo(pygame.sprite.Sprite):
-    def __init__(self, x, y):       # Contructor de la clase ladrillo.
-        self.x = x
-        self.y = y
-        
-    def update(self):
-        pygame.draw.rect(ventana, GREEN, (self.x, self.y, 60,20))
-        self.rect = pygame.Rect(self.x, self.y, 60,20)
-#         super() .__init__(self)                 # Herencia de otra clase."""
-
-# # Inicialización de otros objetos MIRAR ESTO!!!!!
-#         self.image = pygame.image.load("ladrillo.png")
-#         #os.path.join("resources", "images", "ladrillo.png")
-#         self.rect = self.image.get_rect(x = x, y = y)
-#         self.puntos = puntos(x = 560, y = 860)
+bricks = generate_bricks()
 """..."""
 
 # Pongo el bate en la parte inferior de la pantalla
@@ -83,7 +77,7 @@ while jugando:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             jugando = False
-
+          
     # Compruebo si se ha pulsado alguna tecla
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -116,7 +110,14 @@ while jugando:
     # Cuando el bate pegue en la parte derecha de la ventana, contrarrestamos la velocidad del bate.
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width():
         baterect = baterect.move(-6,0)
-
+    """LADRILLOS"""
+    # Comprobación de colisión de la pelota con los ladrillos
+    for brick in bricks:
+        if ballrect.colliderect(brick.rect):
+            speed[1] = -speed[1] # Cambiar dirección vertical de la pelota
+            bricks.remove(brick) # Eliminar el ladrillo de la lista
+            break
+    """..."""
     """GAME OVER Y CERRAR JUEGO"""
     # Compruebo si la pelota toca la parte inferior y si es asi, game over en la pantalla.
     if ballrect.bottom > ventana.get_height():
@@ -139,17 +140,16 @@ while jugando:
 
     # Dibujo el bate
     ventana.blit(bate, baterect)
-
-    # Dibujo los bloques
-    bloques.draw(ventana)
-
-    # Actualizo los bloques (por si necesitan actualización)
-    bloques.update()
-
+    """LADRILLOS"""
+    # Dibujo de los ladrillos
+    for brick in bricks:
+        brick.draw(ventana)
+    """..."""
     # Todos los elementos del juego se vuelven a dibujar
     pygame.display.flip()
 
     # Controlamos la frecuencia de refresco (FPS)
     pygame.time.Clock().tick(60)
+
 
 pygame.quit()
