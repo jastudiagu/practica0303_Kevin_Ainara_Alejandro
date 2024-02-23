@@ -1,4 +1,5 @@
 import pygame, os
+import sys
 from pygame import gfxdraw
 from random import randint ##
 
@@ -10,7 +11,7 @@ ventana = pygame.display.set_mode((1280,900))
 pygame.display.set_caption("Juego")
 
 # Crea el objeto pelota
-ball = pygame.image.load("pelota.png")
+ball = pygame.image.load("LABOLA.png")
 
 # Obtengo el rectángulo del objeto anterior
 ballrect = ball.get_rect()
@@ -26,18 +27,25 @@ speed = [speed_x,speed_y] # En cada ejecución la pelota tiene una velocidad dis
 ballrect.move_ip(0,0)
 
 # Crea el objeto bate, y obtengo su rectángulo
-bate = pygame.image.load("bate.png")
+bate = pygame.image.load("barraladrillo.png")
 baterect = bate.get_rect()
 
 # Crea el objeto ladrillo y obtengo su rectangulo
-brick = pygame.image.load("ladrillo.png")
+brick = pygame.image.load("ladrillomario.png")
 brickrect = brick.get_rect()
 
 
 GREEN = (0,255,0)
 """LADRILLO"""
 # Definimos la clase ladrillo.
-class Ladrillo(pygame.sprite.Sprite):
+
+"""class Bloque(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.image.load("ladrillomario.png")
+        self.rect = self.image.get_rect(topleft=(x, y))"""
+
+"""class Ladrillo(pygame.sprite.Sprite):
     def __init__(self, x, y):       # Contructor de la clase ladrillo.
         self.x = x
         self.y = y
@@ -45,7 +53,7 @@ class Ladrillo(pygame.sprite.Sprite):
     def update(self):
         pygame.draw.rect(ventana, GREEN, (self.x, self.y, 60,20))
         self.rect = pygame.Rect(self.x, self.y, 60,20)
-#         super() .__init__(self)                 # Herencia de otra clase.
+#         super() .__init__(self)                 # Herencia de otra clase."""
 
 # # Inicialización de otros objetos MIRAR ESTO!!!!!
 #         self.image = pygame.image.load("ladrillo.png")
@@ -62,7 +70,9 @@ baterect.move_ip(546,824)                                #MODIFICAR PARA CENTRAR
 cont_golpes = 0
 
 fuente = pygame.font.Font(None, 80) 
-
+"""LADRILLO"""
+bloques = pygame.sprite.Group()  
+"""."""
 # Bucle principal del juego
 jugando = True
 while jugando:
@@ -122,13 +132,19 @@ while jugando:
 
     # Se pinta la ventana con un color
     # Esto borra los posibles elementos que teníamos anteriormente
-    ventana.fill((0,0 ,0))
+    ventana.fill((124, 192, 201))
 
     # Dibujo la pelota
     ventana.blit(ball, ballrect)
 
     # Dibujo el bate
     ventana.blit(bate, baterect)
+
+    # Dibujo los bloques
+    bloques.draw(ventana)
+
+    # Actualizo los bloques (por si necesitan actualización)
+    bloques.update()
 
     # Todos los elementos del juego se vuelven a dibujar
     pygame.display.flip()
