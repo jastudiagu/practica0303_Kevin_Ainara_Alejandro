@@ -33,7 +33,7 @@ class LadrilloIndestructible:                 # Definimos la clase para los ladr
         surface.blit(self.image, self.rect)   # Dibuja el ladrillo en la superficie de destino
 
 """
-INICIALZACIÓN DEL JUEGO
+INICIALIZACIÓN DEL JUEGO
 
 """
 
@@ -91,7 +91,7 @@ def generar_ladrillosR():
     lista_ladrillosR = []                                       # Lista vacía que almacenará los ladrillos reforzados
     for fila in range(1):                                       # Bucle for para iterar sobre cada fila de ladrillos
         for columna in range(11):                               # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
-            x = columna * 240 + 13                              # 120 es el espacio entre los ladrillosy 13 el margen izq.
+            x = columna * 240 + 13                              # 240 es el espacio entre los ladrillosy 13 el margen izq.
             y = fila * 51 + 312                                 # 51 es el espacio entre los ladrillos en columna y 312 el margen con la parte superior
             lista_ladrillosR.append(LadrilloReforzado(x, y))    # Crea objeto con coordenadas x e y , y las agrega a la lista
     return lista_ladrillosR                                     # Devuelve los ladrillos generados
@@ -100,19 +100,19 @@ ladrillo_reforzado = generar_ladrillosR()                       # Asigno variabl
 bloquesR = pygame.sprite.Group()                                # Crea grupo de sprites con los ladrillos
 
 """LADRILLO INDESTRUCTIBLE"""
-ladrilloI = pygame.image.load("ladrillomario.png")              # Crea el objeto ladrilloR con la imágen dada
+ladrilloI = pygame.image.load("ladrilloduro.com.png")              # Crea el objeto ladrilloR con la imágen dada
 
-def generar_ladrillosR():                                   
-    lista_ladrillosR = []                                       # Lista vacía que almacenará los ladrillos reforzados
-    for fila in range(1):                                       # Bucle for para iterar sobre cada fila de ladrillos
-        for columna in range(11):                               # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
-            x = columna * 240 + 13                              # 120 es el espacio entre los ladrillosy 13 el margen izq.
-            y = fila * 51 + 312                                 # 51 es el espacio entre los ladrillos en columna y 312 el margen con la parte superior
-            lista_ladrillosR.append(LadrilloReforzado(x, y))    # Crea objeto con coordenadas x e y , y las agrega a la lista
-    return lista_ladrillosR                                     # Devuelve los ladrillos generados
+def generar_ladrillosI():                                   
+    lista_ladrillosI = []                                       # Lista vacía que almacenará los ladrillos reforzados
+    for i in range(1):                                       # Bucle for para iterar sobre cada fila de ladrillos
+        for j in range(2):                                # Bucle for dentro del otro para iterar sobre cada columna de ladrillos
+            x = j * 1200 + 13                                  # 240 es el espacio entre los ladrillos y 13 el margen izq.
+            y = i * 51 + 412                                      # 51 es el espacio entre los ladrillos en columna y 312 el margen con la parte superior
+            lista_ladrillosI.append(LadrilloIndestructible(x, y))    # Crea objeto con coordenadas x e y , y las agrega a la lista
+    return lista_ladrillosI                                    # Devuelve los ladrillos generados
  
-ladrillo_reforzado = generar_ladrillosR()                       # Asigno variable a la llamada de la función
-bloquesR = pygame.sprite.Group()                                # Crea grupo de sprites con los ladrillos
+ladrillo_indestructible = generar_ladrillosI()                       # Asigno variable a la llamada de la función
+bloquesI = pygame.sprite.Group()                                # Crea grupo de sprites con los ladrillos
 
 
 """
@@ -188,6 +188,15 @@ while jugando:                              # Iniciamos bucle principal del jueg
 
     for ladrilloR in ladrillo_reforzado:                # Dibujo de los ladrillos
         ladrilloR.draw(ventana)
+
+    """LADRILLOS INDESTRUCTIBLES COLISIÓN"""
+    # Comprobación de colisión de la pelota con los ladrillos
+    for ladrilloI in ladrillo_indestructible:                # Bucle colisión pelota con ladrillos                                    
+        if ballrect.colliderect(ladrilloI.rect):        # Si la pelota colisiona con un ladrillo
+            speed[1] = -speed[1]                                                        
+
+    for ladrilloI in ladrillo_indestructible:                # Dibujo de los ladrillos
+        ladrilloI.draw(ventana)
 
     """GAME OVER Y CERRAR JUEGO"""
     fuente = pygame.font.Font(None, 80) 
