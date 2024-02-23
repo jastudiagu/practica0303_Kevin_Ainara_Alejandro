@@ -82,10 +82,10 @@ while jugando:
 
     
     if keys[pygame.K_LEFT] and baterect.left < 0: # Cuando el bate pegue en la parte izquierda de la ventana, contrarrestamos la velocidad del bate.
-        baterect = baterect.move(6,0)
+        baterect = baterect.move(7,0)
     
     if keys[pygame.K_RIGHT] and baterect.right > ventana.get_width(): # Cuando el bate pegue en la parte derecha de la ventana, contrarrestamos la velocidad del bate.
-        baterect = baterect.move(-6,0)
+        baterect = baterect.move(-7,0)
 
    
     """PELOTA"""
